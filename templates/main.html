@@ -1,0 +1,31 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <style>
+        body {
+            background-color: #ffeb3b;
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+        h1 {
+            color: #ff5722;
+            font-size: 3em;
+        }
+        .content {
+            margin-top: 20px;
+            padding: 20px;
+            background: #fff;
+            display: inline-block;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <h1>🎉 Не переживай, если не все работает как надо. Если бы все  работало хорошо , то ты бы здесь давно уже не работал. 🎈</h1>
+    <div class="content">
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>
