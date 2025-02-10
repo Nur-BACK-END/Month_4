@@ -1,10 +1,13 @@
+{% extends "navbar.html" %}
+
+{% block content %}
 {% load static %}
 <!DOCTYPE html>
 <html lang="ru">
 <head>
     <style>
         body {
-            background-color: #ffeb3b;
+            background-color: #202f2f;
             text-align: center;
             font-family: Arial, sans-serif;
         }
@@ -23,9 +26,9 @@
     </style>
 </head>
 <body>
-    <h1>🎉 Не переживай, если не все работает как надо. Если бы все  работало хорошо , то ты бы здесь давно уже не работал. 🎈</h1>
+    <h1>🎉 Не переживай, если не все работает как надо. Если бы все  работало хорошо , то ты бы здесь давно уже не работал 🎈</h1>
     <div class="content">
-        {% block content %}{% endblock %}
     </div>
 </body>
 </html>
+{% endblock %}
