@@ -1,63 +1,137 @@
 {% extends "navbar.html" %}
-
 {% load static %}
 {% block content %}
 
-<div class="container mt-5">
-    <div class="card text-white bg-dark shadow-lg p-4 rounded position-relative">
-        <div class="row g-10">
-            
-            <div class="col-md-4 d-flex align-items-center">
-                {% if post.image %}
-                <img src="{{ post.image.url }}" class="card-img-top mb-4" alt="Post Image" 
-                     style="max-height: 100%; object-fit: cover; border-radius: 10px; box-shadow: 0 0 15px 5px rgba(255, 255, 255, 0.7); max-width: 100%; object-fit: cover; border-radius: 30px;">
-                {% else %}
-                <img src="{% static 'images (1).png' %}" class="card-img-top mb-4" alt="" 
-                     style="max-height: 100%; object-fit: cover; border-radius: 10px; box-shadow: 0 0 15px 5px rgba(255, 255, 255, 0.7); max-width: 100%; object-fit: cover; border-radius: 30px;">
-                {% endif %}
-            </div>
-            
-            <div class="col-md-8">
-                <div class="card-body">
-                    <h1 class="card-title fw-bold fs-1 border-bottom pb-5">{{ post.title }}</h1>
-                    <h4 class="card-text text-light fs-4 border-bottom pb-3">Описание: {{ post.content }}</h4>
-                </div>
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item bg-dark text-white fs-5">Категория: {{ post.category }}</li> 
-                    <li class="list-group-item bg-dark text-white fs-5">Teg: {{ post.teg }}</li>                     
+<div class="container mt-5 d-flex justify-content-center">
+    {% if post.image %}
+    <img src="{{ post.image.url }}" class="me-4 shadow-lg" alt="Post Image" 
+         style="width: 220px; height: 330px; object-fit: cover; border-radius: 15px; box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);">
+    {% else %}
+    <img src="{% static 'images (1).png' %}" class="me-4 shadow-lg" alt="Default Image" 
+         style="width: 220px; height: 330px; object-fit: cover; border-radius: 15px; box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);">
+    {% endif %}
+    
 
-                </ul>
-                
-                <!-- Блок для дат, выравниваем по правому краю -->
-                <div class="position-absolute bottom-0 end-0 p-3 text-white fs-5">
-                    <p>Дата публикации: {{ post.created_at }}</p>
-                    <p>Дата обновления: {{ post.updated_at }}</p>
-                </div>
-            </div>
-        </div>
+
+    <div class="col-md-9">
+        <nav class="custom-navbar">
+            <a class="nav-link-pro " href="#">Личный</a>
+            <a class="nav-link-pro" href="#">О нас</a>
+        </nav>
+        <div class="navbar-divider"></div>
+
+
         
-        <div class="position-absolute top-0 end-0 p-3 text-white rounded shadow-lg fs-4">
-            Оценка: 
-            {% if post.rate == 1 %}★☆☆☆☆ 
-            {% elif post.rate == 0 %}☆☆☆☆☆
-            {% elif post.rate == 2 %}★★☆☆☆
-            {% elif post.rate == 3 %}★★★☆☆
-            {% elif post.rate == 4 %}★★★★☆
-            {% else %}★★★★★
-            {% endif %}
+        <div class="divider"></div>
+
+        <p></p>
+
+        <div class="card text-white bg-dark shadow-lg" style="width: 100%; border-radius: 10px; border: none;">
+
+            <li class="list-group-item bg-dark text-white">Теги: 
+                {% for tag in post.tag.all %}
+                    <span class="badge bg-secondary mx-1 pb-2">{{ tag.name }}</span>
+                {% endfor %}
+            </li>
+
+
+            <h4 class="pb-2">Описание:</h4>
+            <p class="fs-6" id="post-content">
+                {% if post.content|length > 100 %}
+                    <span id="short-content">{{ post.content|truncatewords:100 }}</span>
+                    <span id="ellipsis">...</span>
+                    
+                    <span id="full-content" style="display: none;">{{ post.content }}</span>
+                    <a href="javascript:void(0);" id="show-more" class="text-white">Подробнее</a>
+                    
+                {% else %}
+                    {{ post.content }}
+
+                {% endif %}
+            </p>
+
+
+
+            <ul class="list-group list-group-flush bg-dark">
+                <li class="list-group-item bg-dark text-white">{{ post.category }}</li>
+            </ul>
+
+            <div class="text-end mt-3">
+                <p class="text-white">Публикация: {{ post.created_at }}</p>
+                <p class="text-white">Обновление: {{ post.updated_at }}</p>
+            </div>
         </div>
     </div>
 </div>
 
-<style> 
-    .card {
-        max-width: 1500px;
-        margin: auto;
+
+<style>
+    .custom-navbar {
+        background: none;
+        padding-bottom: 5px;
+        display: flex;
+        gap: 20px;
+    }
+
+
+    .nav-link-pro {
+        color: white;
+        font-size: 17px;
+        text-decoration: none;
         position: relative;
+        padding-bottom: 5px;
+        display: inline-block;
+        cursor: pointer;
     }
-    .card-title {
-        text-align: left;
+
+    .nav-link-pro::after {
+        content: "";
+        position: absolute;
+        left: 70%;
+        bottom: 0;
+        width: 0;
+        height: 7px;
+        background-color: #705b85;
+        transition: width 0.3s ease-out, left 0.3s ease-out;
+        border-radius: 50px 50px 0 0; /* Овал в верхней части */
     }
-</style> 
+
+    .nav-link-pro:hover::after,
+    .nav-link-pro.active::after {
+        width: 100%;
+        left: 0;
+    }
+
+    .navbar-divider {
+        width: 100%;
+        height: 2px;
+        background-color: rgba(255, 255, 255, 0.2);
+        margin-top: -4px;
+    }
+</style>
+
+
+
+
+
+
+
+
+<script>
+    // Добавляем обработчик события только если элемент существует
+    const showMoreButton = document.getElementById("show-more");
+    if (showMoreButton) {
+        showMoreButton.addEventListener("click", function() {
+        
+            // Скрыть часть текста и показать оставшийся
+            document.getElementById("short-content").style.display = "none";
+            document.getElementById("ellipsis").style.display = "none";
+            document.getElementById("full-content").style.display = "inline";
+            showMoreButton.style.display = "none";
+        });
+    }
+
+
+</script>
 
 {% endblock %}

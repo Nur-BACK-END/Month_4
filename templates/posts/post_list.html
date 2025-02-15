@@ -3,67 +3,194 @@
 
 {% block content %}
 
-<div class="container mt-4 d-flex flex-wrap gap-4 justify-content-center">
+<div class="main-container">
 
-    {% for post in posts %}
+    <div class="posts-wrapper">
 
-    <div class="card text-white bg-dark shadow-lg p-3 rounded" style="width: 20rem;">
+        {% for post in posts %}
+        <div class="post-card text-white bg-dark shadow-lg rounded">
+            <a href="/posts/{{ post.id }}/">
 
-        {% if post.image %}
-            <img src="{{ post.image.url }}" class="card-img-top rounded" alt="Post Image">
-        {% else %}
-            <img src="{% static 'images (1).png' %}" class="card-img-top rounded" alt="">
-        {% endif %}
-
-        <li class="list-group-item bg-dark text-white fs-5">Оценка: 
-            {% if post.rate == 1 %}★☆☆☆☆ 
-            {% elif post.rate == 0 %}☆☆☆☆☆
-            {% elif post.rate == 2 %}★★☆☆☆
-            {% elif post.rate == 3 %}★★★☆☆
-            {% elif post.rate == 4 %}★★★★☆
-            {% else %}★★★★★
+            {% if post.image %}
+                <img src="{{ post.image.url }}" class="post-img rounded" alt="{{ post.title }}">
+            {% else %}
+                <img src="{% static 'images (1).png' %}" class="post-img rounded" alt="{{ post.title }}">
             {% endif %}
-        </li>
 
-        
-        <li class="list-group-item bg-dark text-white text-end">
-            {% for tag in post.tag.all %}
-                <span class="badge bg-secondary mx-20">{{ tag.name }}</span>
-            {% endfor %}
-        </li>
+            
+            </a>
+            <div class="rating">⭐ {{ post.rate }}</div>
 
 
-        <div class="card-body">
-            <h5 class="card-title fw-bold" style="margin-bottom: 50px;">{{ post.title }}</h5>
-            <p class="card-text text-light" style="border-bottom: 2px solid #ffffff; padding-bottom: 10px;">Описание: {{ post.content }}</p>
+            <div class="post-body">
+                <h5 class="post-title fw-bold">{{ post.title }}</h5>
+            </div>
+
+
+            <div class="tags-container">
+                <input type="checkbox" id="toggle-tags-{{ post.id }}" class="tags-checkbox">
+                <label for="toggle-tags-{{ post.id }}" class="badge bg-secondary main-tag">
+                    {% if post.tag.all %}
+                        {{ post.tag.all.0.name }}
+                    {% endif %}
+                </label>
+
+
+                <div class="extra-tags">
+                    {% for tag in post.tag.all %}
+                        {% if not forloop.first %}
+                            <span class="badge bg-secondary">{{ tag.name }}</span>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+
+            </div>
+
+            <ul class="list-group list-group-flush">            
+                <li class="list-group-item bg-dark text-white">{{ post.category }}</li>
+            </ul>
+
         </div>
-
-
-
-        <ul class="list-group list-group-flush">            
-            <li class="list-group-item bg-dark text-white">{{ post.category }}</li>
-
-
-            <li class="list-group-item bg-dark text-white">##</li>
-        </ul>
-    
-
-
-
-        <div class="card-body text-center">
-            <a href="/posts/{{post.id}}/" class="btn btn-primary w-100">Подробнее</a>
-        </div>
+        {% endfor %}
 
     </div>
 
-    {% endfor %}
-
 </div>
 
-<style> 
-.card-title{
-    text-align: center;
+<style>
+
+.rating {
+    position: absolute;
+    top: 0px;
+    right: -1px;
+    background-color: rgba(0, 0, 0, 0.637);
+    color: rgb(255, 247, 0);
+    font-weight: bold;
+    padding: 1px 3px;
+    border-radius: 30px 0 0 30px;
+    font-size: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: auto;
+    min-width: 35px;
 }
-</style> 
+
+.rating::before {
+    content: "★";
+    color: rgb(255, 247, 0);
+    font-size: 1px;
+}
+
+.main-container {
+    display: flex;
+    justify-content: flex-start;  /* передвинуть контейнер влево */
+    align-items: flex-start;
+    margin-top: 60px;
+    padding-left: 70px;  /* Отступ слева */
+}
+
+.posts-wrapper {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); /* Уменьшает минимальный размер постов */
+    gap: 10px;
+    max-width: 60%;
+    padding: 10px;  /* Уменьшает отступы внутри */
+    border-radius: 6px;
+    box-shadow: 0px 0px 29px rgba(255, 255, 255, 0.1);
+    background-color: rgba(0, 0, 0, 0.905); /* Прозрачный фон */
+}
+
+.post-card {
+    text-align: center;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: #333;
+    transition: transform 0.3s ease;
+    padding: 0;
+    position: relative;
+}
+
+.post-img:hover {
+    transform: scale(1.05);
+}
+
+.post-img {
+    width: 100%;
+    max-height: 70%;
+    height: auto;
+    object-fit: cover;
+}
+
+.rating {
+    margin: 2px 0;
+}
+
+.post-title {
+    font-size: 0.77rem;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-align: center;
+    padding: 10px;
+    background-image: linear-gradient(45deg, #ffffff, #ffffff);
+    background-clip: text;
+    color: transparent;
+    animation: glow 3s ease-in-out infinite alternate;
+    cursor: pointer;
+    transition: transform 0.9s ease;
+    text-transform: uppercase;
+}
+
+@keyframes glow {
+    0% {
+        text-shadow: 0 0 10px #2e4a63, 0 50 20px #2e4a63, 0 0 30px #5b3c3e, 0 0 40px #2e4a63;
+    }
+    80% {
+        text-shadow: 0 0 20px #4e0d27, 0 0 30px #4e0d27, 0 0 40px #4e0d27, 0 0 50px #2d0f1b;
+    }
+    10% {
+        text-shadow: 0 0 20px #6d3249, 0 0 30px #9e4368, 0 0 30px #b7245f, 0 0 30px #ff0066;
+    }
+}
+
+.tags-container {
+    display: inline-block;
+    position: relative;
+    cursor: pointer;
+    margin-top: auto;
+}
+
+.tags-checkbox {
+    display: none;
+}
+
+.main-tag {
+    cursor: pointer;
+}
+
+.extra-tags {
+    display: none;
+    max-height: 100px;
+    overflow-y: auto;
+    padding: 5px;
+    background-color: #222;
+    border-radius: 5px;
+    transition: max-height 0.3s ease-out;
+}
+
+.tags-checkbox:checked ~ .extra-tags {
+    display: block;
+    max-height: 100px;
+}
+
+.extra-tags::-webkit-scrollbar {
+    display: none;
+}
+
+.badge {
+    margin: 7px;
+    font-size: 0.9rem;
+}
+</style>
 
 {% endblock %}

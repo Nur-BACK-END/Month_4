@@ -28,11 +28,11 @@ class Post(models.Model):
     image = models.ImageField(null=True, blank=True)
     title = models.CharField(max_length=150)
     content = models.CharField(max_length=1100)    
-    rate = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(5)],default=0)
+    rate = models.FloatField(validators=[MinValueValidator(0), MaxValueValidator(5)],default=0)
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateTimeField(auto_now=True, null=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True, blank=True)
-    tag = models.ManyToManyField(Tag,  blank=True, null=True)
+    tag = models.ManyToManyField(Tag, related_name='posts', blank=True, null=True)
 
 
     def __str__(self):
