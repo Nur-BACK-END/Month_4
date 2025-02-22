@@ -1,8 +1,6 @@
 from django import forms
 from posts.models import Post
-from posts.models import Category
-
-
+from posts.models import Category, Tag
 
 class PostCreateForm(forms.ModelForm):
 
@@ -25,3 +23,39 @@ class PostCreateForm(forms.ModelForm):
         if title and title.lower() =='python':
             raise forms.ValidationError('Название или описание должны быть разными')
         return title
+    
+
+
+class SearchForm(forms.Form):
+    search = forms.CharField(
+        max_length=100,
+        required=False,
+        widget = forms.TextInput(attrs={'placeholder':'Search'})
+    )
+
+    category = forms.ModelChoiceField(queryset= Category.objects.all(), 
+                                      required=False, 
+                                      widget = forms.Select())
+    
+    tegs = forms.ModelMultipleChoiceField(queryset=Tag.objects.all(), 
+                                          widget=forms.CheckboxSelectMultiple
+                                          )
+
+
+    
+    orderings = (
+        ("title", "По названию"),
+        ("-title", "По названию(от я до а)"),
+
+        ("created_at", "Дата создания"),
+        ("-created_at", "Дата создания(По убыванию)"),
+
+        ("rate" , "Рейтинг"),
+        ("-rate" , "Рейтинг(По убыванию)"),
+    )
+
+    ordering = forms.ChoiceField(
+        choices=orderings, 
+        required=False, 
+        widget=forms.Select(attrs={"class": "form-control"}),
+        )

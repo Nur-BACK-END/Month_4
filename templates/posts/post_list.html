@@ -3,6 +3,12 @@
 
 {% block content %}
 
+<form method = "get" enctype="multipart/form-data">
+    {{form.as_p}}
+    <button type="submit">Поиск</button>
+
+</form>
+
 <div class="main-container">
 
     <div class="posts-wrapper">
@@ -57,7 +63,53 @@
 
 </div>
 
+<!-- перелистование на след страницу  -->
+<div class="pagination-container">
+    {% for i in max_pages %}
+        <a href="/posts/?page={{ i }}" class="pagination-link">
+            {{ i }}
+        </a>
+    {% endfor %}
+</div>
+
+
+
 <style>
+    .pagination-container {
+        text-align: center;
+        padding: 20px;
+        margin-top: 20px;
+    }
+    
+    .pagination-link {
+        display: inline-block;
+        margin: 0 10px;
+        padding: 12px 20px;
+        background-color: #866d34; 
+        color: white;
+        text-decoration: none;
+        font-size: 16px;
+        border-radius: 30px; 
+        transition: all 0.3s ease; 
+    }
+    
+    .pagination-link:hover {
+        background-color: #aca82d;
+        transform: translateY(-3px); 
+    }
+    
+    .pagination-link.active {
+        background-color: #ffee00;
+    }
+    
+
+    .pagination-link:focus {
+        outline: none;
+        box-shadow: 0 0 5px rgba(125, 152, 43, 0.549); 
+    }
+    
+
+
 
 .rating {
     position: absolute;
@@ -87,18 +139,18 @@
     justify-content: flex-start;  /* передвинуть контейнер влево */
     align-items: flex-start;
     margin-top: 60px;
-    padding-left: 70px;  /* Отступ слева */
+    padding-left: 70px;  /* отступ слева */
 }
 
 .posts-wrapper {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); /* Уменьшает минимальный размер постов */
+    grid-template-columns: repeat(auto-fill, minmax(173px, 2fr)); /* уменьшает минимальный размер постов */
     gap: 10px;
     max-width: 60%;
-    padding: 10px;  /* Уменьшает отступы внутри */
+    padding: 10px;  /* уменьшает отступы внутри */
     border-radius: 6px;
     box-shadow: 0px 0px 29px rgba(255, 255, 255, 0.1);
-    background-color: rgba(0, 0, 0, 0.905); /* Прозрачный фон */
+    background-color: rgba(0, 0, 0, 0.905); /* ппрозрачный фон */
 }
 
 .post-card {
@@ -117,7 +169,7 @@
 
 .post-img {
     width: 100%;
-    max-height: 70%;
+    max-height: 61%;
     height: auto;
     object-fit: cover;
 }
@@ -135,23 +187,11 @@
     background-image: linear-gradient(45deg, #ffffff, #ffffff);
     background-clip: text;
     color: transparent;
-    animation: glow 3s ease-in-out infinite alternate;
     cursor: pointer;
     transition: transform 0.9s ease;
     text-transform: uppercase;
 }
 
-@keyframes glow {
-    0% {
-        text-shadow: 0 0 10px #2e4a63, 0 50 20px #2e4a63, 0 0 30px #5b3c3e, 0 0 40px #2e4a63;
-    }
-    80% {
-        text-shadow: 0 0 20px #4e0d27, 0 0 30px #4e0d27, 0 0 40px #4e0d27, 0 0 50px #2d0f1b;
-    }
-    10% {
-        text-shadow: 0 0 20px #6d3249, 0 0 30px #9e4368, 0 0 30px #b7245f, 0 0 30px #ff0066;
-    }
-}
 
 .tags-container {
     display: inline-block;
@@ -194,3 +234,6 @@
 </style>
 
 {% endblock %}
+
+
+
