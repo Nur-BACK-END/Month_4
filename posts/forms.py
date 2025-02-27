@@ -59,3 +59,11 @@ class SearchForm(forms.Form):
         required=False, 
         widget=forms.Select(attrs={"class": "form-control"}),
         )
+    
+
+
+class PostUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Post
+        fields = ['image', 'title', 'content', 'rate', 'category', 'tag']
+        exclude = ['created_at']

@@ -1,0 +1,47 @@
+{% extends 'navbar.html' %}
+{% load static %}
+
+{% block content %}
+<h1 class="mt-5" style="text-align: center;">
+    Profile
+</h1>
+
+<div class="content">
+    <img src="{{ user.profile.avatar.url }}" alt="Profile Picture" style="width: 200px; height: 200px; border-radius: 50%;"> 
+    <h2> {{ user.username }} </h2>
+    <h2> {{ user.first_name }}</h2> 
+    <h3> {{ user.last_name }}</h3>
+    <h3> {{ user.email }}</h3>
+    <h3> {{ user.profile.age }}</h3>
+
+    
+    <div class="posts-grid">
+        {% for post in posts %}
+        <div class="post-card text-white bg-dark shadow-lg rounded">
+            <a href="{% url 'post_detail' post.id %}">
+                {% if post.image %}
+                    <img src="{{ post.image.url }}" class="post-img rounded" alt="{{ post.title }}">
+                {% else %}
+                    <img src="{% static 'images (1).png' %}" class="post-img rounded" alt="{{ post.title }}">
+                {% endif %}
+            </a>
+            <div class="rating">⭐ {{ post.rate }}</div>
+            <div class="post-body">
+                <h5 class="post-title fw-bold">{{ post.title }}</h5>
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item bg-dark text-white category-item" data-category="{{ post.category }}">
+                    {{ post.category }}
+                </li>
+            </ul>
+            {% if post.author == user %}
+            <a href="posts/{{post.id}}/update/" class="bth btn-primaty"> Именить пост</a>
+            {% endif %}
+        </div>
+
+        {% empty %}
+        <p>У вас пока нет постов.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
